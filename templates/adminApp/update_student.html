@@ -1,0 +1,121 @@
+{% extends "adminApp/index.html" %}
+
+{% block mainblock %}
+<div class="card shadow">
+    <div class="card-body">
+        <h5 class="p-2 mb-3 border-bottom" style="border-bottom: 2px solid #009CFF;">Update Student</h5>
+        <div class="container-fluid">
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-row">
+
+                    <div class="col-sm-6 mb-3">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" name="first_name" class="form-control" placeholder="First Name"
+                                value="{{ student.user.first_name }}">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 mb-3">
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" name="last_name" class="form-control" placeholder="Last Name"
+                                value="{{ student.user.last_name }}">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 mb-3">
+                        <label>Gender</label>
+                        <div class="d-flex align-items-center">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="gender" id="female" value="Female"
+                                    {% if student.gender == "Female" %}checked{% endif %}>
+                                <label class="form-check-label" for="female">Female</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="gender" id="male" value="Male"
+                                    {% if student.gender == "Male" %}checked{% endif %}>
+                                <label class="form-check-label" for="male">Male</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="gender" id="other" value="Other"
+                                    {% if student.gender == "Other" %}checked{% endif %}>
+                                <label class="form-check-label" for="other">Other</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 mb-3">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" class="form-control" placeholder="Email"
+                                value="{{ student.user.email }}">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 mb-3">
+                        <div class="form-group">
+                            <label>Password (Leave blank to keep existing password)</label>
+                            <input type="password" name="password" class="form-control" placeholder="New Password">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 mb-3">
+                        <div class="form-group">
+                            <label>Date of Birth</label>
+                            <input type="date" name="dob" class="form-control" value="{{ student.dob|date:'Y-m-d' }}">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 mb-3">
+                        <div class="form-group">
+                            <label>Course</label>
+                            <select name="course" class="form-control">
+                                <option value="">Select Course</option>
+                                {% for i in Courses %}
+                                <option value="{{ i.id }}" {% if student.course.id == i.id %}selected{% endif %}>{{ i.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 mb-3">
+                        <div class="form-group">
+                            <label>Division</label>
+                            <select name="division" class="form-control">
+                                <option value="">Select Division</option>
+                                {% for j in divisions %}
+                                <option value="{{ j.id }}" {% if student.division.id == j.id %}selected{% endif %}>{{ j.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 mb-3">
+                        <div class="form-group">
+                            <label>Enrollment Number</label>
+                            <input type="text" name="enrollment_number" class="form-control"
+                                value="{{ student.enrollment_number }}">
+                        </div>
+                    </div>
+
+                    <div class="col-12 text-left">
+                        <input type="submit" value="Update" class="btn btn-primary px-4">
+                    </div>
+
+                    
+
+                </div>
+            </form>
+        </div>
+
+        <div class="col-12 text-center mt-2">
+            <form method="post" action="{% url 'delete_student' student.id %}" onsubmit="return confirm('Are you sure you want to delete this student?');">
+                {% csrf_token %}
+                <input type="submit" value="Delete" class="btn btn-danger px-4">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

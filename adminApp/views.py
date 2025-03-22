@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect, HttpResponse
-
+from django.shortcuts import render, redirect, get_object_or_404,HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from .models import ExtendedUser
-from studentApp.models import Course
+from studentApp.models import Course,Student,Division
+from django.contrib.auth.models import User
+from django.contrib import messages
 
 
 
@@ -86,3 +87,105 @@ def add_course(request):
         return redirect('manage_course') #redirect after adding a course
 
     return render(request, 'adminApp/add_course.html')
+
+
+
+def manage_student(request):
+    Courses = Course.objects.all()
+    divisions = Division.objects.all()
+    students = Student.objects.all()
+    return render(request,'adminApp/manage_student.html', locals()) 
+
+
+
+def add_student(request):
+    Courses = Course.objects.all()
+    divisions = Division.objects.all()
+    if request.method == "POST":
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+       
+        email = request.POST['email']
+        password = request.POST['password']
+        dob = request.POST['dob']
+        gender = request.POST['gender']
+        enrollment_number = request.POST['enrollment_number']
+        course_id = request.POST['course']
+        division_id = request.POST['division']
+
+        course = Course.objects.get(id=course_id)
+        division = Division.objects.get(id=division_id)
+        
+
+        if Student.objects.filter(enrollment_number=enrollment_number).exists():
+            messages.error(request, "Enrollment number already exists.")
+            return redirect('add_student')
+        username = email
+
+        user = User.objects.create_user(
+            username=username, email=email, password=password,
+            first_name=first_name, last_name=last_name
+        )
+
+        student = Student(
+            user=user,
+            enrollment_number=enrollment_number,
+            dob=dob,
+            gender=gender,
+            course=course,
+            division=division,
+            
+        )
+        student.save()
+
+        messages.success(request, "Student added successfully.")
+        return redirect('manage_student')
+    return render(request, 'adminApp/add_student.html', locals()) 
+
+   
+def delete_student(request, student_id):
+    student = get_object_or_404(Student, id=student_id)
+
+    if request.method == "POST":
+        user = student.user 
+
+        student.delete() 
+        user.delete() 
+
+        messages.success(request, "Student deleted successfully.")
+        return redirect('manage_student')
+    
+def update_student(request, student_id):
+    student = get_object_or_404(Student, id=student_id)
+    courses = Course.objects.all()
+    divisions = Division.objects.all()
+
+    if request.method == "POST":
+        # Update only fields that are present in request.POST and are not empty
+        if 'first_name' in request.POST and request.POST['first_name']:
+            student.user.first_name = request.POST['first_name']
+        if 'last_name' in request.POST and request.POST['last_name']:
+            student.user.last_name = request.POST['last_name']
+        if 'email' in request.POST and request.POST['email']:
+            student.user.email = request.POST['email']
+        if 'dob' in request.POST and request.POST['dob']:
+            student.dob = request.POST['dob']
+        if 'gender' in request.POST and request.POST['gender']:
+            student.gender = request.POST['gender']
+        if 'enrollment_number' in request.POST and request.POST['enrollment_number']:
+            if Student.objects.filter(enrollment_number=request.POST['enrollment_number']).exclude(id=student_id).exists():
+                messages.error(request, "Enrollment number already exists.")
+                return redirect('update_student', student_id=student.id)
+            student.enrollment_number = request.POST['enrollment_number']
+        if 'course' in request.POST and request.POST['course']:
+            student.course = Course.objects.get(id=request.POST['course'])
+        if 'division' in request.POST and request.POST['division']:
+            student.division = Division.objects.get(id=request.POST['division'])
+
+        student.user.save()  # Save User model changes
+        student.save()  # Save Student model changes
+
+        messages.success(request, "Student details updated successfully.")
+        return redirect('manage_student')
+
+    return render(request, 'adminApp/update_student.html', locals())
