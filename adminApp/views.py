@@ -9,6 +9,7 @@ from studentApp.models import Course,Student,Division
 from django.contrib.auth.models import User
 from django.contrib import messages
 from facultyApp.models import Staff
+from .models import ExtendedUser
 
 
 
@@ -298,6 +299,8 @@ def add_staff(request):
             username=email, email=email, password=password,
             first_name=first_name, last_name=last_name
         )
+         
+        ExtendedUser.objects.create(user=user, user_type = "staff")
 
         staff = Staff.objects.create(
             user=user,
