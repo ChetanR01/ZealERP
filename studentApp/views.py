@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from facultyApp.models import notification
+from studentApp.models import Course
 
-# Create your views here.
+
 
 def dashboard(request):
     return render(request, 'base.html')

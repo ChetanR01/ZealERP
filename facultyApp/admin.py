@@ -4,3 +4,9 @@ from .models import Staff, notification
 admin.site.register(Staff)
 admin.site.register(notification)
 
+from facultyApp.models import Division
+
+# Register your models here.
+from .models import Staff
+
+admin.site.register(Division)

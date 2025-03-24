@@ -26,3 +26,13 @@ class notification(models.Model):
     
     def __str__(self):
         return f"{self.sender_name} sends notification successfully"
+        return f"{self.user.first_name} {self.user.last_name}({self.designation})"
+
+class Division(models.Model):
+    name = models.CharField(max_length=255)
+    academic_year= models.CharField(max_length=150)
+    department = models.CharField(max_length=150)
+    total_students = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.name} is Division of {self.department}"
