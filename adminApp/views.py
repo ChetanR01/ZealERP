@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .models import ExtendedUser
 from studentApp.models import Course
+from facultyApp.models import notification
+from django.shortcuts import get_object_or_404
 
 
 # Create your views here.
@@ -41,3 +43,31 @@ def dashboard(request):
 def courses(request):
     courses = Course.objects.all()
     return render(request, 'adminApp/manage_course.html', {'courses': courses})
+
+def create_notification(request):
+    if request.method == "POST":
+        name = request.POST["name"]
+        title = request.POST["title"]
+        desc = request.POST["desc"]
+        notif_type = request.POST["type"]
+        url = request.POST['url']
+        # Save to the database
+        notification.objects.create(sender_name=name, title=title, detail_des=desc,  notification_type=notif_type, url=url)
+        return render(request, "adminApp/notification.html")
+    else:
+        return render(request, "adminApp/notification.html")
+    
+def show_notification(request):
+    notifications = notification.objects.all().order_by('-created_at')
+    for noti in notifications:
+        print(noti)
+    return render(request,"adminApp/notificate.html",{'data':notifications})
+
+def del_notificate(request):
+    data = notification.objects.all().order_by('-created_at')
+    return render(request,'adminApp/delete_notification.html',{'noti':data})
+
+def del_notification(request, id):
+    notify = get_object_or_404(notification, id=id)
+    notify.delete()
+    return redirect('/delete_notificate')

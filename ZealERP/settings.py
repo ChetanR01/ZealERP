@@ -91,7 +91,7 @@ DATABASES = {
         'NAME': "zealerp",
         'HOST': "localhost",
         'USER': "root",
-        'PASSWORD': "admin",
+        'PASSWORD': "Imam@123",
         'PORT':"3306"
     }
 }

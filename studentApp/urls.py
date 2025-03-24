@@ -3,4 +3,5 @@ from . import views
 
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),
+    path('notify', views.show_notifications, name='notify'),
 ]
