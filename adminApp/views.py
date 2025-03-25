@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404,HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404,HttpResponse,HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from .models import ExtendedUser
 from studentApp.models import Course
