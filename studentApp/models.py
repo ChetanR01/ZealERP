@@ -15,7 +15,7 @@ class Course(models.Model):
 
 class Division(models.Model):
     name = models.CharField(max_length=50, unique=True)
-    academic_year= models.CharField(max_length=150) 
+    academic_year= models.CharField(max_length=50,default=2023)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)  
 
     def __str__(self):

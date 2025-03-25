@@ -126,8 +126,8 @@ def del_notification(request, id):
     return redirect('/delete_notificate')
 
 def divisions(request):
-    division = Division.objects.all()
-    return render(request, 'adminApp/manage_division.html',{'divisions':division})
+    divisions = Division.objects.all()
+    return render(request, 'adminApp/manage_division.html',{'divisions':divisions})
 
 def edit_course(request, course_id):
     try:

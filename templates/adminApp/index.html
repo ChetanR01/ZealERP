@@ -2,7 +2,6 @@
 
 
 {% block sidenav %}
-<a href="/manage-course" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Manage Course</a>
 <div class="nav-item dropdown">
     <a href="#" class="nav-item nav-link active" data-bs-toggle="dropdown"><i class="fa fa-bell me-lg-2"></i>Notifications</a>
     <div class="dropdown-menu bg-transparent border-0">
@@ -14,22 +13,5 @@
 <a href="/manage-division" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Manage Division</a>
 <a href="/manage-student" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Manage Student</a>
 <a href="/manage-staff" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Manage Staff</a>
-
-{% if request.user.is_authenticated and request.user.is_staff %}
-<br>
 <a href="/manage-course" class="nav-item nav-link active"><i class="fa fa-graduation-cap me-2"></i>Manage Course</a>
-<br>
-<a href="/manage-subject" class="nav-item nav-link active"><i class="fa fa-book me-2"></i>Manage Subject</a>
-<br>
-{% endif%}
-
-
-<a href="/manage-division" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Manage Division</a>
-<br>
-
-<a href="/manage-student" class="nav-item nav-link active"><i class="fa fa-users me-2"></i>Manage Student</a>
-<br>
-<a href="/manage-staff" class="nav-item nav-link active"><i class="fa fa-id-badge me-2"></i>Manage Staff</a>
-<br>
-
 {% endblock sidenav %}

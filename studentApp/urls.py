@@ -8,6 +8,6 @@ urlpatterns = [
     path('view_subjects', views.view_subjects, name = 'view_subjects'),
 
     path('',views.courses,name='courses'),
-    path('',views.divisions,name='divisions'),
+    path('manage-division',views.divisions,name='divisions'),
 
 ]
