@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from adminApp.models import ExtendedUser
 # Create your models here.
 
 
@@ -47,12 +48,12 @@ class LeaveRequest(models.Model):
         ('rejected', 'Rejected'),
     ]
 
-    student = models.ForeignKey('Student', on_delete=models.CASCADE, related_name='leave_requests') 
-    duration_start = models.DateField() 
-    duration_end = models.DateField() 
+    student = models.ForeignKey(ExtendedUser, on_delete=models.CASCADE, related_name='leave_requests')  # Use ExtendedUser
+    duration_start = models.DateField()
+    duration_end = models.DateField()
     reason = models.TextField()
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
-    proof_image = models.FileField(upload_to='leave_requests/proofs/', null=True, blank=True)  # Optional proof (image/PDF)
+    proof_image = models.FileField(upload_to='leave_requests/proofs/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     @property

@@ -1,0 +1,35 @@
+{% extends "adminApp/index.html" %}
+
+{% block mainblock %}
+<div class="container mt-4">
+    <h1 class="mb-4">Edit Division</h1>
+
+    <form method="POST" class="bg-light p-4 rounded shadow">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Division Name:</label>
+            <input type="text" id="name" name="name" value="{{ division.name }}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="academic_year" class="form-label">Academic Year:</label>
+            <input type="text" id="academic_year" name="academic_year" value="{{ division.academic_year }}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="department" class="form-label">Department:</label>
+            <input type="text" id="department" name="department" value="{{ division.department }}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="total" class="form-label">Total Student:</label>
+            <input type="text" id="total" name="total" value="{{ division.total }}" class="form-control" required>
+        </div>
+
+
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+</div>
+{% endblock mainblock %}
