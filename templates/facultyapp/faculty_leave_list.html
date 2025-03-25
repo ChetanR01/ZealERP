@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Staff Leave Applications</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Staff</th>
+            <th>Date</th>
+            <th>Message</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for leave in leaves %}
+        <tr>
+            <td>{{ leave.id }}</td>
+            <td>{{ leave.staff.name }}</td>
+            <td>{{ leave.date }}</td>
+            <td>{{ leave.message }}</td>
+            <td>
+                {% if leave.status == 0 %}
+                    Pending
+                {% elif leave.status == 1 %}
+                    Approved
+                {% else %}
+                    Rejected
+                {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'approve_reject_staff_leave' leave.id %}">Update Status</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

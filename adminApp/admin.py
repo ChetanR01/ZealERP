@@ -1,17 +1,14 @@
 from django.contrib import admin
-from django.contrib.auth.models import User
-from .models import ExtendedUser
-from django.contrib.auth.admin import UserAdmin
+from .models import StudentLeaveApplication, FacultyLeaveApplication
 
+@admin.register(StudentLeaveApplication)
+class StudentLeaveAdmin(admin.ModelAdmin):
+    list_display = ['student', 'faculty', 'start_date', 'end_date', 'status', 'created_at']
+    list_filter = ['status']
+    search_fields = ['student__username']
 
-# Extended user
-class Extended_userInline(admin.StackedInline):
-    model =ExtendedUser
-    can_delete = False
-    verbose_name_plural = 'ExtendedUsers' 
-
-class CustomizedUserAdmin(UserAdmin):
-    inlines = (Extended_userInline, )
-
-admin.site.unregister(User)
-admin.site.register(User, CustomizedUserAdmin)
+@admin.register(FacultyLeaveApplication)
+class FacultyLeaveAdmin(admin.ModelAdmin):
+    list_display = ['faculty', 'admin', 'start_date', 'end_date', 'status', 'created_at']
+    list_filter = ['status']
+    search_fields = ['faculty__username']

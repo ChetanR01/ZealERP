@@ -11,7 +11,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
 import os
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles',   
 ]
 
 MIDDLEWARE = [
@@ -54,6 +56,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'ZealERP.urls'
+
+#AUTH_USER_MODEL = 'auth.User'
+
+#AUTH_USER_MODEL = 'adminApp.extendedUser'
+
+SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret-key')
 
 TEMPLATES = [
     {
@@ -91,7 +99,7 @@ DATABASES = {
         'NAME': "zealerp",
         'HOST': "localhost",
         'USER': "root",
-        'PASSWORD': "admin",
+        'PASSWORD': "samarth123",
         'PORT':"3306"
     }
 }

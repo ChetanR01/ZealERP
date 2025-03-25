@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block mainblock %}
+    <div class="container my-5">
+        <div class="leave-form-container">
+            <h2 class="mb-4 text-center">Faculty Leave Request</h2>
+            <form method="POST" enctype="multipart/form-data" class="leave-form">
+                {% csrf_token %}
+                {{ form.as_p }}  <!-- This will render the form fields -->
+
+                <button type="submit" class="btn btn-primary mt-3 w-100">Submit Request</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_css %}
+    <style>
+        :root {
+            --primary: #009CFF;
+            --light: #F3F6F9;
+            --dark: #191C24;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .leave-form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: var(--light);
+            border-radius: 10px;
+            box-shadow: 0px 4px 12px var(--shadow-color);
+            border: 1px solid #ddd;
+        }
+
+        .leave-form-container h2 {
+            color: var(--dark);
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .leave-form .form-group label {
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        .leave-form .form-control {
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #007bb5;
+            border-color: #007bb5;
+        }
+
+        .leave-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .leave-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .leave-form .form-group input[type="file"] {
+            padding: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .leave-form-container {
+                padding: 20px;
+                width: 90%;
+            }
+
+            .btn-primary {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
+    </style>
+{% endblock %}
