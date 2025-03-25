@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block mainblock %}
+    <div class="container my-5">
+        <h2 class="mb-4">Manage Leave Requests</h2>
+        
+        {% if leave_requests %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in leave_requests %}
+                        <tr>
+                            <td>{{ request.student.user.first_name }} {{ request.student.user.last_name }}</td>
+                            <td>{{ request.duration_start }}</td>
+                            <td>{{ request.duration_end }}</td>
+                            <td>{{ request.reason }}</td>
+                            <td>{{ request.get_status_display }}</td>
+                            <td>
+                                {% if request.status == 'pending' %}
+                                    <a href="{% url 'staff:approve_leave' request.id %}" class="btn btn-success btn-sm">Approve</a>
+                                    <a href="{% url 'staff:reject_leave' request.id %}" class="btn btn-danger btn-sm">Reject</a>
+                                {% else %}
+                                    <span class="text-muted">No action needed</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No pending leave requests at the moment.</p>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block extra_css %}
+    <style>
+        :root {
+            --primary: #009CFF;
+            --light: #F3F6F9;
+            --dark: #191C24;
+        }
+
+        .container {
+            max-width: 900px;
+            padding: 30px;
+            background-color: var(--light);
+            border-radius: 8px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        table th, table td {
+            text-align: center;
+        }
+
+        table th {
+            background-color: var(--primary);
+            color: #fff;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f9f9f9;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            transition: 0.3s;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-primary:hover, .btn-success:hover, .btn-danger:hover {
+            opacity: 0.9;
+        }
+
+        .table {
+            border-radius: 10px;
+            border: none;
+            background-color: #fff;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+{% endblock %}
