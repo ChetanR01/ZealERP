@@ -1,8 +1,6 @@
 from django.shortcuts import render
 from .models import notification
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from .models import Division  # Corrected import path
+from studentApp.models import Division
 
 # Create your views here.
 
