@@ -1,0 +1,52 @@
+{% extends 'student/index.html' %}
+
+{% block mainblock %}
+
+    <!-- Main Content -->
+    <main class="content">
+        <h1>Your Personal Profile Info</h1>
+        {% if user.is_authenticated %}
+            {% if student %}
+                <div class="form-section">
+                    <label>First Name</label>
+                    <input type="text" placeholder="First Name" value="{{ student.user.first_name }}" readonly>
+
+                    <label>Last Name</label>
+                    <input type="text" placeholder="Last Name" value="{{ student.user.last_name }}" readonly>
+
+                    <label>Email</label>
+                    <input type="email" placeholder="Email" value="{{ student.user.email }}" readonly>
+
+                    <label>Date of Birth</label>
+                    <input type="text" placeholder="Date of Birth" value="{{ student.dob }}" readonly>
+
+                    <label>Phone Number</label>
+                    <input type="text" placeholder="Phone Number" value="{{ student.phone }}" readonly>
+
+                    <label>Gender</label>
+                    <input type="text" placeholder="Gender" value="{{ student.gender }}" readonly>
+
+                    <label>Enrollment Number</label>
+                    <input type="text" placeholder="Enrollment Number" value="{{ student.enrollment_number }}" readonly>
+
+                    <label>Course</label>
+                    <input type="text" placeholder="Course" value="{{ student.course.name }}" readonly>
+
+                    <label>Division</label>
+                    <input type="text" placeholder="Division" value="{{ student.division.name }}" readonly>
+
+                    <label>Guardian Name</label>
+                    <input type="text" placeholder="Guardian Name" value="{{ student.guardian_name }}" readonly>
+
+                    <label>Guardian Phone</label>
+                    <input type="text" placeholder="Guardian Phone" value="{{ student.guardian_phone }}" readonly>
+                </div>
+            {% else %}
+                <p class="text-danger">Profile data not found. Please contact the administrator.</p>
+            {% endif %}
+        {% else %}
+            <p>Please log in to view your profile. <a href="{% url 'signin' %}">Login here</a>.</p>
+        {% endif %}
+    </main>
+
+{% endblock mainblock %}

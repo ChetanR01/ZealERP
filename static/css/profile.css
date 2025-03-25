@@ -1,0 +1,98 @@
+/* Profile Page Specific Styles */
+.content {
+    padding: 30px;
+}
+
+.content h1 {
+    font-size: 1.8rem;
+    color: var(--dark);
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.profile-container {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.form-section {
+    flex: 1;
+    min-width: 300px;
+}
+
+.form-section h2 {
+    font-size: 1.3rem;
+    color: var(--primary);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+label {
+    display: block;
+    margin-top: 15px;
+    font-weight: 600;
+    color: #555;
+    font-size: 0.95rem;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px 12px;
+    margin-top: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    background: #f9f9f9;
+    transition: border-color 0.3s;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(0, 156, 255, 0.1);
+}
+
+input[readonly] {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+    color: #666;
+}
+
+.button-container {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Profile Image Styles */
+.circular--portrait {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    border: 5px solid var(--white);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.circular--portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .profile-container {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .content {
+        padding: 20px;
+    }
+}

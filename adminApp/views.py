@@ -5,9 +5,6 @@ from studentApp.models import Course,Student,Division
 from django.contrib.auth.models import User
 from django.contrib import messages
 
-
-
-# Create your views here.
 def signin(request):
     if request.method == "POST":
         user_type = request.POST['role']
@@ -96,51 +93,100 @@ def manage_student(request):
     students = Student.objects.all()
     return render(request,'adminApp/manage_student.html', locals()) 
 
-
+from django.db import transaction
 
 def add_student(request):
     Courses = Course.objects.all()
     divisions = Division.objects.all()
+    
     if request.method == "POST":
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
-       
-        email = request.POST['email']
-        password = request.POST['password']
-        dob = request.POST['dob']
-        gender = request.POST['gender']
-        enrollment_number = request.POST['enrollment_number']
-        course_id = request.POST['course']
-        division_id = request.POST['division']
+        try:
+            # Get form data with safe defaults
+            first_name = request.POST.get('first_name', '').strip()
+            last_name = request.POST.get('last_name', '').strip()
+            email = request.POST.get('email', '').strip()
+            password = request.POST.get('password', '').strip()
+            dob = request.POST.get('dob', '').strip()
+            gender = request.POST.get('gender', '').strip()
+            enrollment_number = request.POST.get('enrollment_number', '').strip()
+            phone = request.POST.get('phone', '').strip()
+            course_id = request.POST.get('course', '').strip()
+            division_id = request.POST.get('division', '').strip()
+            guardian_name = request.POST.get('guardian_name', '').strip()
+            guardian_phone = request.POST.get('guardian_phone', '').strip()
 
-        course = Course.objects.get(id=course_id)
-        division = Division.objects.get(id=division_id)
-        
-
-        if Student.objects.filter(enrollment_number=enrollment_number).exists():
-            messages.error(request, "Enrollment number already exists.")
-            return redirect('add_student')
-        username = email
-
-        user = User.objects.create_user(
-            username=username, email=email, password=password,
-            first_name=first_name, last_name=last_name
-        )
-
-        student = Student(
-            user=user,
-            enrollment_number=enrollment_number,
-            dob=dob,
-            gender=gender,
-            course=course,
-            division=division,
+            # Validate required fields
+            required_fields = {
+                'First Name': first_name,
+                'Last Name': last_name,
+                'Email': email,
+                'Password': password,
+                'Date of Birth': dob,
+                'Gender': gender,
+                'Enrollment Number': enrollment_number,
+                'Phone': phone,
+                'Course': course_id,
+                'Division': division_id
+            }
             
-        )
-        student.save()
+            for field, value in required_fields.items():
+                if not value:
+                    messages.error(request, f"{field} is required.")
+                    return redirect('add_student')
 
-        messages.success(request, "Student added successfully.")
-        return redirect('manage_student')
-    return render(request, 'adminApp/add_student.html', locals()) 
+            # Check for existing user
+            if User.objects.filter(username=email).exists():
+                messages.error(request, "This email is already registered.")
+                return redirect('add_student')
+
+            # Check for existing student records
+            if Student.objects.filter(enrollment_number=enrollment_number).exists():
+                messages.error(request, "Enrollment number already exists.")
+                return redirect('add_student')
+            
+            if Student.objects.filter(phone=phone).exists():
+                messages.error(request, "Phone number already exists.")
+                return redirect('add_student')
+
+            # Get related objects
+            try:
+                course = Course.objects.get(id=course_id)
+                division = Division.objects.get(id=division_id)
+            except (Course.DoesNotExist, Division.DoesNotExist):
+                messages.error(request, "Invalid course or division selected.")
+                return redirect('add_student')
+
+            # Create user and student in a transaction
+            with transaction.atomic():
+                user = User.objects.create_user(
+                    username=email,
+                    email=email,
+                    password=password,
+                    first_name=first_name,
+                    last_name=last_name
+                )
+
+                student = Student(
+                    user=user,
+                    enrollment_number=enrollment_number,
+                    dob=dob,
+                    gender=gender,
+                    phone=phone,
+                    course=course,
+                    division=division,
+                    guardian_name=guardian_name,
+                    guardian_phone=guardian_phone
+                )
+                student.save()
+
+            messages.success(request, "Student added successfully.")
+            return redirect('manage_student')
+
+        except Exception as e:
+            messages.error(request, f"Error adding student: {str(e)}")
+            return redirect('add_student')
+
+    return render(request, 'adminApp/add_student.html', {'Courses': Courses, 'divisions': divisions})
 
    
 def delete_student(request, student_id):
