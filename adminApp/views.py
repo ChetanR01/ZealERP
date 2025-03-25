@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404,HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from .models import ExtendedUser
 
-from studentApp.models import Course,Student,Division
+from studentApp.models import Course,Student,Division,Attendance
 from django.contrib.auth.models import User
 from django.contrib import messages
 from facultyApp.models import Staff
@@ -313,3 +313,18 @@ def delete_staff(request, staff_id):
         messages.success(request, "Staff details updated successfully!")
         return redirect('manage_staff')
     return render(request, 'adminApp/delete_staff.html',{'staff':staff})
+
+def manage_attendance(request):
+    attendance = Attendance.objects.all()
+    return render(request, 'adminApp/manage_attend.html', {'attendance': attendance})
+
+
+
+def update_attend(request):
+
+    return render(request, 'adminApp/update_attend.html')
+
+def view_attend(request):
+    attendance = get_object_or_404(Attendance)
+    stud = attendance.student
+    return render(request, 'adminApp/view_attend.html', {'attendance': attendance, 'stud':stud})

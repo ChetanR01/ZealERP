@@ -1,0 +1,25 @@
+{% extends "adminApp/index.html" %}
+{% block mainblock %}
+
+  
+<div class="col-12">
+    <div class="bg-light rounded h-100 p-4">
+        <h6 class="mb-4">Update Attendance</h6>
+        <form method="post">
+            {% csrf_token %}
+            <p>Student: {{ student.user }}</p>
+            <p>Date: {{ attendance.date }}</p>
+            <p>Time Slot: {{ attendance.time_slot }}</p>
+
+            <label for="is_present">Present:</label>
+            <select name="is_present" id="is_present">
+                <option value="True" {% if attendance.is_present %}selected{% endif %}>Yes</option>
+                <option value="False" {% if not attendance.is_present %}selected{% endif %}>No</option>
+            </select>
+
+            <a href="" type="submit" class="btn btn-primary">Update</a>
+            <a href="" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
