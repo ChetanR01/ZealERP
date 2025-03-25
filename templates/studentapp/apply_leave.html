@@ -6,32 +6,22 @@
             <h2 class="mb-4 text-center">Apply for Leave</h2>
             <form method="POST" enctype="multipart/form-data" class="leave-form">
                 {% csrf_token %}
-                
-                <!-- Leave Start Date -->
                 <div class="form-group">
                     <label for="duration_start">Leave Start Date</label>
                     <input type="date" name="duration_start" id="duration_start" class="form-control" required>
                 </div>
-                
-                <!-- Leave End Date -->
                 <div class="form-group">
                     <label for="duration_end">Leave End Date</label>
                     <input type="date" name="duration_end" id="duration_end" class="form-control" required>
                 </div>
-
-                <!-- Reason for Leave -->
                 <div class="form-group">
                     <label for="reason">Reason for Leave</label>
                     <textarea name="reason" id="reason" class="form-control" rows="3" required></textarea>
                 </div>
-
-                <!-- Proof Image -->
                 <div class="form-group">
-                    <label for="proof_image">Proof Image (Optional)</label>
+                    <label for="proof_image">Proof Image (Medical Certificate, etc...Optional)</label>
                     <input type="file" name="proof_image" id="proof_image" class="form-control-file">
                 </div>
-
-                <!-- Submit Button -->
                 <button type="submit" class="btn btn-primary mt-3 w-100">Apply Leave</button>
             </form>
         </div>

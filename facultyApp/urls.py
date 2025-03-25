@@ -1,6 +1,8 @@
 from django.urls import path, include
 from . import views
 
+app_name = 'staff'
+
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),
     path('manage_leave/', views.manage_leave, name='manage_leave'),

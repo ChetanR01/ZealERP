@@ -15,13 +15,14 @@
                 <input type="text" id="duration"  class="form-control" required name="academic">
             </div>
             <div class="mb-3">
-                <label for="is_active" class="form-label">Department</label>
-                <input type="text" id="duration"  class="form-control" required name="department">
-            </div>
-            <div class="mb-3">
-                <label for="duration" class="form-label">Total Student</label>
-                <input type="text" id="duration"  class="form-control" required name="total">
-            </div>
+                <label for="course" class="form-label">Course</label>
+                <select class="form-select" id="course" name="course_id">
+                    <option selected>Choose...</option>
+                    {% for course in courses %}
+                    <option value="{{ course.id }}">{{ course.name }}</option>
+                    {% endfor %}
+                </select> <br>
+ 
             <button type="submit" class="btn btn-primary">Add</button>
             <a href="/manage-division" class="btn btn-secondary">Back to Division List</a>
         </form>

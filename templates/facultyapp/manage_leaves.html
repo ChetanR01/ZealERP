@@ -12,6 +12,7 @@
                         <th>Start Date</th>
                         <th>End Date</th>
                         <th>Reason</th>
+                        <th>Proof</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -23,6 +24,15 @@
                             <td>{{ request.duration_start }}</td>
                             <td>{{ request.duration_end }}</td>
                             <td>{{ request.reason }}</td>
+                            <td>
+                                {% if request.proof_image %}
+                                    <a href="{{ request.proof_image.url }}" target="_blank">
+                                        <img src="{{ request.proof_image.url }}" alt="Proof Image" style="max-width: 100px; height: auto;">
+                                    </a>
+                                {% else %}
+                                    No proof image available
+                                {% endif %}
+                            </td>
                             <td>{{ request.get_status_display }}</td>
                             <td>
                                 {% if request.status == 'pending' %}

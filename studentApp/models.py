@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from adminApp.models import ExtendedUser
 # Create your models here.
 
 
@@ -16,6 +15,7 @@ class Course(models.Model):
 
 class Division(models.Model):
     name = models.CharField(max_length=50, unique=True)
+    academic_year= models.CharField(max_length=150, default='2024') 
     course = models.ForeignKey(Course, on_delete=models.CASCADE)  
 
     def __str__(self):
@@ -48,7 +48,7 @@ class LeaveRequest(models.Model):
         ('rejected', 'Rejected'),
     ]
 
-    student = models.ForeignKey(ExtendedUser, on_delete=models.CASCADE, related_name='leave_requests')  # Use ExtendedUser
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='leave_requests')  # Use ExtendedUser
     duration_start = models.DateField()
     duration_end = models.DateField()
     reason = models.TextField()
@@ -61,4 +61,4 @@ class LeaveRequest(models.Model):
         return (self.duration_end - self.duration_start).days + 1
 
     def __str__(self):
-        return f"Leave request by {self.student.user.first_name} {self.student.user.last_name} on {self.leave_date} ({self.status})"
+        return f"Leave request by {self.student.user.first_name} {self.student.user.last_name} on ({self.status})"

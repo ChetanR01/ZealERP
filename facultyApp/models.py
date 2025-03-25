@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-# Create your models here.
 
 class Staff(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -12,14 +11,4 @@ class Staff(models.Model):
     is_gfm = models.BooleanField(default=False) 
 
     def __str__(self):
-        return f"{self.user.first_name} {self.user.last_name}"
-        return f"{self.user.first_name} {self.user.last_name}({self.designation})"
-
-class Division(models.Model):
-    name = models.CharField(max_length=255)
-    academic_year= models.CharField(max_length=150)
-    department = models.CharField(max_length=150)
-    total_students = models.IntegerField()
-
-    def __str__(self):
-        return f"{self.name} is Division of {self.department}"
+        return f"{self.user.first_name} {self.user.last_name} ({self.designation})"
