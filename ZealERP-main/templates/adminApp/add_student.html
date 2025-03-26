@@ -1,0 +1,106 @@
+{% extends "adminApp/index.html" %}
+
+{% block mainblock %}
+<div class="card shadow">
+    <div class="card-body">
+        <h5 class="p-2 mb-3 border-bottom" style="border-bottom: 2px solid #009CFF;">Add Student</h5>
+        <div class="container-fluid">
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-row">
+
+                    <div class="col-sm-6 mb-3">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" name="first_name" class="form-control" placeholder="First Name">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 mb-3">
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" name="last_name" class="form-control" placeholder="Last Name">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 mb-3">
+                        <label>Gender</label>
+                        <div class="d-flex align-items-center">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="gender" id="female" value="Female">
+                                <label class="form-check-label" for="female">Female</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="gender" id="male" value="Male">
+                                <label class="form-check-label" for="male">Male</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="gender" id="other" value="Other">
+                                <label class="form-check-label" for="other">Other</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 mb-3">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" class="form-control" placeholder="Email">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 mb-3">
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" name="password" class="form-control" placeholder="Password">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 mb-3">
+                        <div class="form-group">
+                            <label>Date of Birth</label>
+                            <input type="date" name="dob" class="form-control">
+                        </div>
+                    </div>
+
+                    
+                    <div class="col-sm-6 mb-3">
+                        <div class="form-group">
+                            <label>Course</label>
+                            <select name="course" class="form-control" required>
+                                <option value="">Select Course</option>
+                                {% for i in Courses %}
+                                <option value="{{ i.id }}">{{ i.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 mb-3">
+                        <div class="form-group">
+                            <label>Division</label>
+                            <select name="division" class="form-control" required>
+                                <option value="">Select Division</option>
+                                {% for j in divisions %}
+                                <option value="{{ j.id }}">{{ j.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 mb-3">
+                        <div class="form-group">
+                            <label>Enrollment Number</label>
+                            <input type="text" name="enrollment_number" class="form-control" placeholder="Enrollment Number">
+                        </div>
+                    </div>
+
+                    <div class="col-12 text-center">
+                        <input type="submit" value="Submit" class="btn btn-primary px-4">
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

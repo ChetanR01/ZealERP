@@ -1,0 +1,115 @@
+
+{% extends "adminApp/index.html" %}
+
+{% block mainblock %}
+
+<style>
+    .container-subject {
+        width: 50%;
+        margin: auto;
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .form-container {
+        text-align: center;
+    }
+    
+    h2 {
+        color: #333;
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+    
+    .form-row {
+        margin-bottom: 15px;
+        text-align: left;
+    }
+    
+    label {
+        display: block;
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 5px;
+    }
+    
+    input, select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+        background: #f9f9f9;
+    }
+    
+    button {
+        width: 100%;
+        padding: 10px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    
+    button:hover {
+        background: #0056b3;
+    }
+    
+</style>
+
+
+
+    <div class="container-subject">
+        <div class="form-container">
+            <h2>Add a New Subject </h2>
+
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
++
+                <div class="form-row">
+                    <label for="subject_code">Subject Code</label>
+                    {{ form.subject_code}}
+                </div>
+
+                <div class="form-row">
+                    <label for="subject_name">Subject Name</label>
+                    {{ form.subject_name }}
+                </div>
+                
+                <div class="form-row">
+                    <label for="subject_type">Subject Type</label>
+                    {{ form.subject_type }}
+                </div>
+                
+                <div class="form-row">
+                    <label for="course_type">Course Type</label>
+                    {{ form.course_type }}
+                </div>
+
+                <div class="form-row">
+                    <label for="course">Course</label>
+                    {{ form.course }}
+                </div>
+
+                <div class="form-row">
+                    <label for="semester">Semester</label>
+                    {{ form.semester }}
+                </div>
+
+                <div class="form-row">
+                    <label for="faculty">Faculty</label>
+                    {{ form.faculty }}
+                </div>
+               
+  
+                <button type="submit">Add Subject</button>
+            </form>
+
+            {% endblock mainblock %}
+
+ 

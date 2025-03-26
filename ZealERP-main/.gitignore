@@ -1,0 +1,11 @@
+/env
+.env
+/adminApp/migrations/*
+/studentApp/migrations/*
+/facultyApp/migrations/*
+/adminApp/__pycache__/*
+/studentApp/__pycache__/*
+/facultyApp/__pycache__/*
+/ZealERP/__pycache__/*
+.env.example
+/ZealERP/__pycache__/*
