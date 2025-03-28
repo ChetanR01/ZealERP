@@ -1,8 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404,HttpResponse,HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from .models import ExtendedUser
+
 from studentApp.models import Course
 from facultyApp.models import notification
+
+from studentApp.models import Course,Student,Division
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.shortcuts import get_object_or_404
+
 from adminApp.models import Subject
 from .forms import SubjectForm
 from studentApp.models import Student,Division
@@ -244,6 +251,8 @@ def add_student(request):
         dob = request.POST['dob']
         gender = request.POST['gender']
         enrollment_number = request.POST['enrollment_number']
+        #course_id = request.POST['course']
+        #division_id = request.POST['division']
         course_id = request.POST['course']
         division_id = request.POST['division']
 
@@ -325,6 +334,7 @@ def update_student(request, student_id):
         messages.success(request, "Student details updated successfully.")
         return redirect('manage_student')
 
+    return render(request, 'adminApp/update_student.html', locals())
     return render(request, 'adminApp/update_student.html', locals())
 
 #manage staff

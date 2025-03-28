@@ -7,3 +7,4 @@ from studentApp.models import Course,Student,Division
 admin.site.register(Course)
 admin.site.register(Division)
 admin.site.register(Student)
+admin.site.register(LeaveRequest)

@@ -4,6 +4,7 @@
 
 <head>
     <meta charset="utf-8">
+    <title>ZCOER Computer Department</title>
     <title>DASHMIN - Bootstrap Admin Template</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
@@ -66,8 +67,15 @@
                 </div>
                 <div class="navbar-nav w-100">
                     <a href="index" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                    {% block sidenav %}{% endblock sidenav %}
                     
+                    {% block sidenav %}{% endblock sidenav %}
+
+                    <a class="nav-item nav-link active" href="{% url 'student:apply_leave' %}">
+                    <i class="fa fa-calendar-check me-2"></i>
+                    Apply For Leave
+                    </a>
+
+
                 </div>
             </nav>
         </div>
