@@ -55,7 +55,7 @@
                             <img src="{% static 'img/zeal_logo.png' %}" alt="" style="width: 10em;">
                             <h3>Sign In</h3>
                         </div>
-                        <form action="/signin" method="post">
+                        <form action="{% url 'signin' %}" method="post">
                             {% csrf_token %}
                             
                             <!-- Role Selection Radio Buttons -->
