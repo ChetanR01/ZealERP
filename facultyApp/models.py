@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-# Create your models here.
 
 class Staff(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -12,9 +11,4 @@ class Staff(models.Model):
     is_gfm = models.BooleanField(default=False) 
 
     def __str__(self):
-        return f"{self.user.first_name} {self.user.last_name}({self.designation})"
-
-
-
-    def __str__(self):
-        return f"{self.name} is Division of {self.department}"
+        return f"{self.user.first_name} {self.user.last_name} ({self.designation})"

@@ -7,3 +7,5 @@
 /studentApp/__pycache__/*
 /facultyApp/__pycache__/*
 /ZealERP/__pycache__/*
+.env.example
+/ZealERP/__pycache__/*

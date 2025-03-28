@@ -3,6 +3,9 @@
 from django.shortcuts import render, redirect, HttpResponseRedirect ,HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from .models import ExtendedUser
+from studentApp.models import Course,Student,Division
+from django.contrib.auth.models import User
+from django.contrib import messages
 from django.shortcuts import get_object_or_404
 
 
@@ -222,6 +225,8 @@ def add_student(request):
         dob = request.POST['dob']
         gender = request.POST['gender']
         enrollment_number = request.POST['enrollment_number']
+        #course_id = request.POST['course']
+        #division_id = request.POST['division']
         course_id = request.POST['course']
         division_id = request.POST['division']
 
@@ -303,6 +308,7 @@ def update_student(request, student_id):
         messages.success(request, "Student details updated successfully.")
         return redirect('manage_student')
 
+    return render(request, 'adminApp/update_student.html', locals())
     return render(request, 'adminApp/update_student.html', locals())
 
 #manage staff
