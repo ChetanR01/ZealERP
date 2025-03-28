@@ -1,12 +1,22 @@
-from django.shortcuts import render, redirect, get_object_or_404,HttpResponse
+
+
+from django.shortcuts import render, redirect, HttpResponseRedirect ,HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from .models import ExtendedUser
+from django.shortcuts import get_object_or_404
+
+
+from adminApp.models import Subject
+from .forms import SubjectForm
+
+
 
 from studentApp.models import Course,Student,Division,Attendance
 from django.contrib.auth.models import User
 from django.contrib import messages
 from facultyApp.models import Staff
-from .models import ExtendedUser
+
+
 
 
 
@@ -44,6 +54,50 @@ def dashboard(request):
     return render(request, 'adminApp/index.html')
 
 
+# SUBJECT MANAGEMENT
+def subject(request):
+    subjects = Subject.objects.all()
+    return render(request, 'adminApp/manage_subject.html', {'subjects': subjects})
+
+def add_subject(request) :
+    if request.method == "POST":
+        form =SubjectForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect("/manage-subject")
+        data = Subject.objects.all()
+    else:
+        form =SubjectForm()
+        data = Subject.objects.all()
+    return render(request, 'adminApp/add_subject.html', {'data':data, 'form' : form})
+
+def update_subject(request, id):
+    if request.method == "POST":
+        pi = Subject.objects.get(pk=id)
+        fm = SubjectForm(request.POST, instance=pi)
+        if fm.is_valid():
+            fm.save()
+            return redirect("/manage-subject")
+    else :
+        pi= Subject.objects.get(pk=id)
+        fm =SubjectForm(instance=pi)
+    return render(request, 'adminApp/update_subject.html', {'form':fm})
+    
+def delete_subject(request, id):
+    pi = get_object_or_404(Subject, pk=id)  # Handle case where subject doesn't exist
+    print("subj id", pi)
+    if request.method == "POST":
+        pi.delete()
+        print("deleted")
+        return HttpResponseRedirect("/manage-subject")
+    
+    # If a GET request is made, redirect or show a confirmation page
+    return redirect("/manage-subject") 
+
+
+
+
+# COURSE MANAGEMENT
 def courses(request):
     courses = Course.objects.all()
     return render(request, 'adminApp/manage_course.html', {'courses': courses})
@@ -96,16 +150,28 @@ def add_course(request):
 
     return render(request, 'adminApp/add_course.html')
 
+
 def add_division(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        academic_year = request.POST.get('academic')
-        department = request.POST.get('department')
-        total_student = request.POST.get('total')
-        Division.objects.create( name=name, academic_year=academic_year, department=department, total_students=total_student)
-        return render(request,'adminApp/add_division.html')
-    else:
-        return render(request,'adminApp/add_division.html')
+    if request.method == "POST":
+        name = request.POST.get("name")
+
+        academic_year = request.POST.get("academic")
+        course_id = request.POST.get("course_id")  # Fetch the selected course ID
+
+        if not course_id:
+            return render(request, "adminApp/add_division.html", {
+                "error": "Please select a course.",
+                "courses": Course.objects.all()
+            })
+
+        course = Course.objects.get(id=course_id)  # Get the course object
+
+        Division.objects.create(name=name, academic_year=academic_year, course=course)
+
+        return redirect("/manage-division")  # Redirect after successful addition
+
+    data = Course.objects.all()
+    return render(request, "adminApp/add_division.html", {"courses": data})
 
 def edit_division(request, division_id):
     try:
@@ -116,13 +182,9 @@ def edit_division(request, division_id):
     if request.method == 'POST':
         division_name = request.POST.get('name')
         division_academic = request.POST.get('academic_year')
-        division_department = request.POST.get('department')
-        division_total = request.POST.get('total')
 
         division.name = division_name
         division.academic_year = division_academic  
-        division.department = division_department
-        division.total_students = division_total
         division.save()
 
         return redirect('/manage-division')  # Corrected redirect
@@ -174,8 +236,11 @@ def add_student(request):
 
         user = User.objects.create_user(
             username=username, email=email, password=password,
-            first_name=first_name, last_name=last_name
+            first_name=first_name, last_name=last_name,
+           
         )
+
+        extended_user = ExtendedUser.objects.create(user=user, user_type='student')
 
         student = Student(
             user=user,
@@ -314,8 +379,11 @@ def delete_staff(request, staff_id):
         return redirect('manage_staff')
     return render(request, 'adminApp/delete_staff.html',{'staff':staff})
 
-def manage_attendance(request):
-    attendance = Attendance.objects.all()
+def attend_view(request):
+    if (request.method == 'POST'):
+        if request.user.is_authenticated:
+            attendance = Attendance(attender=request.user)
+            attendance.save()
     return render(request, 'adminApp/manage_attend.html', {'attendance': attendance})
 
 
@@ -324,7 +392,4 @@ def update_attend(request):
 
     return render(request, 'adminApp/update_attend.html')
 
-def view_attend(request):
-    attendance = get_object_or_404(Attendance)
-    stud = attendance.student
-    return render(request, 'adminApp/view_attend.html', {'attendance': attendance, 'stud':stud})
+

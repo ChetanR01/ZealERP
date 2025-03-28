@@ -2,7 +2,13 @@
 
 
 {% block sidenav %}
+
+{% if request.user.is_authenticated and request.user.is_staff %}
 <a href="/manage-course" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Manage Course</a>
+
+<a href="/manage-subject" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Manage Subject</a>
+{% endif%}
+
 
 <a href="/manage-division" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Manage Division</a>
 

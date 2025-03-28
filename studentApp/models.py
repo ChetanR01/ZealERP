@@ -15,6 +15,7 @@ class Course(models.Model):
 
 class Division(models.Model):
     name = models.CharField(max_length=50, unique=True)
+    academic_year= models.IntegerField(default=2020) 
     course = models.ForeignKey(Course, on_delete=models.CASCADE)  
 
     def __str__(self):
@@ -40,11 +41,11 @@ class Student(models.Model):
         return f"{self.user.first_name} {self.user.last_name} - {self.enrollment_number}"
     
 class Attendance(models.Model):
-    student=models.OneToOneField(Student,on_delete=models.CASCADE)
-    date= models.DateField()
+    attender=models.OneToOneField(Student,on_delete=models.CASCADE)
+    date= models.DateTimeField(auto_now_add=True)
     is_present = models.BooleanField(default=False)
     time_slot = models.CharField(max_length=100, blank=True, null=True)
     marked_by = models.CharField(max_length=100, blank=True, null=True)
 
 def __str__(self):
-        return f"{self.student.user} - {self.date} - {'Present' if self.is_present else 'Absent'}"
+        return f"{self.attender.user} - {self.date}"
