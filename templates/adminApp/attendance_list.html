@@ -1,0 +1,34 @@
+{% extends "adminApp/index.html" %}
+
+{% block mainblock %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Attendance List</title>
+    <link rel="stylesheet" type="text/css" href="/static/attendance.css">
+</head>
+<body>
+    <h2>Attendance List</h2>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr>
+            <th>Student Name</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        {% for attendance in attendances %}
+        <tr>
+            <td>{{ attendance.student.name }}</td>
+            <td>{{ attendance.date }}</td>
+            <td>{{ attendance.status }}</td>
+            <td>
+                <a href="{% url 'update_attendance' attendance.id %}">Edit</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <a href="{% url 'mark_attendance' %}">Mark More Attendance</a>
+</body>
+</html>
+{% endblock %}

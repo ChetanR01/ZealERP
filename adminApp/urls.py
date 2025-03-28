@@ -6,6 +6,14 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('signin', views.signin, name='signin'),
     path('', views.dashboard, name='dashboard'),
+    path('manage-course', views.courses, name='courses'),
+    path('notification', views.create_notification, name='notification'),
+    path('notify', views.show_notification, name='notify'),
+    path('notificate/', views.show_notifications, name='notificate'),
+    path('notified/', views.show_fac_notification, name='notified'),
+    path('delete_notificate', views.del_notificate, name='delete_notificate'),
+    path('delete_notification/<int:id>', views.del_notification, name='del_notification'),
+    
 
 
     path('index', views.dashboard, name='dashboard'),
@@ -43,9 +51,10 @@ urlpatterns = [
     path('add_staff/', views.add_staff, name='add_staff'),
     path('update_staff/<int:staff_id>/', views.update_staff, name='update_staff'),
     path('delete_staff/<int:staff_id>/', views.delete_staff, name='delete_staff'),
-
-    path('manage-attendance/', views.attend_view, name='attend_view'),
-    path('update_attend/', views.update_attend, name='update_attend'),
+    path('manage-attendance/', views.mark_attendance, name='mark_attendance'),
+    path('attendance-list/', views.attendance_list, name='attendance_list'),
+    path('update-attendance/<int:attendance_id>/', views.update_attendance, name='update_attendance'),
+  
   
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

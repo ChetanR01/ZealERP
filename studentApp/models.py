@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
+from django.utils.timezone import now
 
 
 class Course(models.Model):
@@ -15,7 +16,8 @@ class Course(models.Model):
 
 class Division(models.Model):
     name = models.CharField(max_length=50, unique=True)
-    academic_year= models.IntegerField(default=2020) 
+    academic_year= models.CharField(max_length=50,default=2023)
+
     course = models.ForeignKey(Course, on_delete=models.CASCADE)  
 
     def __str__(self):
@@ -40,12 +42,34 @@ class Student(models.Model):
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} - {self.enrollment_number}"
     
-class Attendance(models.Model):
-    attender=models.OneToOneField(Student,on_delete=models.CASCADE)
-    date= models.DateTimeField(auto_now_add=True)
-    is_present = models.BooleanField(default=False)
-    time_slot = models.CharField(max_length=100, blank=True, null=True)
-    marked_by = models.CharField(max_length=100, blank=True, null=True)
 
-def __str__(self):
-        return f"{self.attender.user} - {self.date}"
+class LeaveRequest(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+    ]
+
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='leave_requests')  # Use ExtendedUser
+    duration_start = models.DateField()
+    duration_end = models.DateField()
+    reason = models.TextField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    proof_image = models.FileField(upload_to='leave_requests/proofs/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def leave_duration(self):
+        return (self.duration_end - self.duration_start).days + 1
+
+    def __str__(self):
+        return f"Leave request by {self.student.user.first_name} {self.student.user.last_name} on ({self.status})"
+    
+class Attend(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    date = models.DateField(default=now)
+    status = models.CharField(max_length=10, choices=[('Present', 'Present'), ('Absent', 'Absent')],
+    default='Present')
+
+    def __str__(self):
+        return f"{self.student.user} - {self.date} - {self.status}"

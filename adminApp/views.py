@@ -1,24 +1,22 @@
-
-
-from django.shortcuts import render, redirect, HttpResponseRedirect ,HttpResponse
-from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render, redirect, get_object_or_404,HttpResponse,HttpResponseRedirect
+from django.contrib.auth import authenticate, login
 from .models import ExtendedUser
-from django.shortcuts import get_object_or_404
 
+from studentApp.models import Course
+from facultyApp.models import notification
+
+from studentApp.models import Course,Student,Division,Attend
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.shortcuts import get_object_or_404
+from .forms import AttendanceForm
 
 from adminApp.models import Subject
 from .forms import SubjectForm
-
-
-
-from studentApp.models import Course,Student,Division,Attendance
+from studentApp.models import Student,Division
 from django.contrib.auth.models import User
 from django.contrib import messages
 from facultyApp.models import Staff
-
-
-
-
 
 # Create your views here.
 def signin(request):
@@ -102,10 +100,42 @@ def courses(request):
     courses = Course.objects.all()
     return render(request, 'adminApp/manage_course.html', {'courses': courses})
 
+def create_notification(request):
+    if request.method == "POST":
+        name = request.POST["name"]
+        title = request.POST["title"]
+        desc = request.POST["desc"]
+        notif_type = request.POST["type"]
+        url = request.POST['url']
+        notification.objects.create(sender_name=name, title=title, detail_des=desc,  notification_type=notif_type, url=url)
+        return render(request, "adminApp/notification.html")
+    else:
+        return render(request, "adminApp/notification.html")
+    
+def show_notification(request):
+    notifications = notification.objects.all().order_by('-created_at')
+    return render(request,"adminApp/notificate.html",{'data':notifications})
+
+def show_notifications(request):
+    notifications = notification.objects.all().order_by('-created_at')
+    return render(request,"studentApp/notifications.html",{'data':notifications})
+
+def show_fac_notification(request):
+    notifications = notification.objects.all().order_by('-created_at')
+    return render(request,"facultyApp/notification.html",{'data':notifications})
+
+def del_notificate(request):
+    data = notification.objects.all().order_by('-created_at')
+    return render(request,'adminApp/delete_notification.html',{'noti':data})
+
+def del_notification(request, id):
+    notify = get_object_or_404(notification, id=id)
+    notify.delete()
+    return redirect('/delete_notificate')
 
 def divisions(request):
-    division = Division.objects.all()
-    return render(request, 'adminApp/manage_division.html',{'divisions':division})
+    divisions = Division.objects.all()
+    return render(request, 'adminApp/manage_division.html',{'divisions':divisions})
 
 def edit_course(request, course_id):
     try:
@@ -222,6 +252,8 @@ def add_student(request):
         dob = request.POST['dob']
         gender = request.POST['gender']
         enrollment_number = request.POST['enrollment_number']
+        #course_id = request.POST['course']
+        #division_id = request.POST['division']
         course_id = request.POST['course']
         division_id = request.POST['division']
 
@@ -304,6 +336,7 @@ def update_student(request, student_id):
         return redirect('manage_student')
 
     return render(request, 'adminApp/update_student.html', locals())
+    return render(request, 'adminApp/update_student.html', locals())
 
 #manage staff
 def manage_staff(request):
@@ -379,17 +412,27 @@ def delete_staff(request, staff_id):
         return redirect('manage_staff')
     return render(request, 'adminApp/delete_staff.html',{'staff':staff})
 
-def attend_view(request):
-    if (request.method == 'POST'):
-        if request.user.is_authenticated:
-            attendance = Attendance(attender=request.user)
-            attendance.save()
-    return render(request, 'adminApp/manage_attend.html', {'attendance': attendance})
+def mark_attendance(request):
+    if request.method == 'POST':
+        form = AttendanceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('attendance_list')
+    else:
+        form = AttendanceForm()
+    students = Student.objects.all()
+    return render(request, 'adminApp/mark_attendance.html', {'form': form, 'students': students})
 
+def attendance_list(request):
+    attendances = Attend.objects.all().order_by('-date')
+    return render(request, 'adminApp/attendance_list.html', {'attendances': attendances})
 
-
-def update_attend(request):
-
-    return render(request, 'adminApp/update_attend.html')
-
+def update_attendance(request, attendance_id):
+    attendance = get_object_or_404(Attend, id=attendance_id)
+    if request.method == 'POST':
+        status = request.POST.get('status')
+        attendance.status = status
+        attendance.save()
+        return redirect('attendance_list')
+    return render(request, 'adminApp/update_attend.html', {'attendance': attendance})
 
