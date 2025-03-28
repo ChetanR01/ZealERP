@@ -1,0 +1,36 @@
+{% extends "adminApp/index.html" %}
+{% load static %}
+{% block mainblock %}
+
+<div class="container">
+    <h2>Send Notification</h2>
+    
+    <form id="notificationForm" action="/notification" method="POST">
+        {% csrf_token %}
+        <label for="recipient">Sender:</label>
+        <input type="text" id="recipient" placeholder="Enter sender's Name" required name="name">
+        
+        <label for="title">Title:</label>
+        <input type="text" id="title" placeholder="Enter notification title" required name="title">
+        
+        <label for="message">Message:</label>
+        <textarea id="message" placeholder="Enter notification message" required name="desc"></textarea>
+        
+        <label for="type">Notification Type:</label>
+        <select id="type" required name="type">
+            <option value="Holiday">Holiday</option>
+            <option value="Examination">Examination</option>
+            <option value="Event">Event</option>
+            <option value="Sport">Sport</option>
+        </select>
+        
+        <label for="action_url">A URL:</label>
+        <input type="url" id="action_url" placeholder="Enter URL (optional)" name="url">
+        
+        <button type="submit">Send Notification</button>
+    </form>
+</div>
+
+
+
+{% endblock mainblock %}

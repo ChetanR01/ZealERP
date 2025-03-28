@@ -1,10 +1,19 @@
+
+from .models import notification
+from studentApp.models import Division
+
 from django.shortcuts import render, redirect
 from studentApp.models import LeaveRequest
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
+
 def dashboard(request):
     return render(request, 'base.html')
+
+def show_fac_notification(request):
+    notifications = notification.objects.all().order_by('-created_at')
+    return render(request,"facultyApp/notification.html",{'data':notifications})
 
 @login_required
 def manage_leave(request):
@@ -35,8 +44,7 @@ def reject_leave(request, leave_id):
         return redirect('staff:manage_leave')
     except LeaveRequest.DoesNotExist:
         return HttpResponse("Leave request not found.", status=404)
-
-from studentApp.models import Division
+      
 def divisions(request):
     divisions = Division.objects.all()
     return render(request, 'adminApp/manage_division.html', {'divisions': divisions})

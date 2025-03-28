@@ -1,0 +1,31 @@
+{% extends "adminApp/index.html" %}
+{% block mainblock %}
+<div class="col-12">
+    <div class="bg-light rounded h-100 p-4">
+        <h6 class="mb-4">Delete Notification</h6>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">SR.No.</th>
+                        <th scope="col">Notification title</th>
+                        <th scope="col">Sending Date</th>
+                        <th scope="col">Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for notif in noti %}
+                    <tr>
+                        <th scope="row">{{forloop.counter}}</th>
+                        <td>{{notif.title}}</td>
+                        <td>{{notif.created_at}}</td>
+                        <td><a style="color: red; text-decoration: none;cursor: pointer; font-size: 12px;border: 2px solid;" href="/delete_notification/{{notif.id}}">✖</a></td>
+                    </tr>
+                    {% endfor %}
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock mainblock %}

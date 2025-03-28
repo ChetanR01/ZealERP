@@ -1,12 +1,20 @@
 from django.shortcuts import render, redirect
+
+from facultyApp.models import notification
+
 from studentApp.models import Course, Student, Division
 from .models import LeaveRequest
+
 from adminApp.models import Subject
 from django.contrib.auth.decorators import login_required
 
 
 def dashboard(request):
     return render(request, 'base.html')
+
+def show_notifications(request):
+    notifications = notification.objects.all().order_by('-created_at')
+    return render(request,"studentApp/notifications.html",{'data':notifications})
 
 
 def apply_leave(request):
@@ -40,7 +48,6 @@ def leave_request(request):
         return render(request, 'error.html', {'message': 'Student record not found!'})
 
     return render(request, 'studentapp/leave_request.html', {'leave_requests': leave_requests})
-
 
 
 def view_subjects(request):
