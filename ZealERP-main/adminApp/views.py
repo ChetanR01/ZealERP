@@ -1,7 +1,5 @@
-
-
-from django.shortcuts import render, redirect, HttpResponseRedirect ,HttpResponse
-from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render, redirect, get_object_or_404,HttpResponse,HttpResponseRedirect
+from django.contrib.auth import authenticate, login
 from .models import ExtendedUser
 from studentApp.models import Course,Student,Division
 from django.contrib.auth.models import User
@@ -13,6 +11,8 @@ from adminApp.models import Subject
 from .forms import SubjectForm
 
 
+from studentApp.models import Course
+from facultyApp.models import notification
 
 from studentApp.models import Course,Student,Division
 from django.contrib.auth.models import User
@@ -22,6 +22,7 @@ from facultyApp.models import Staff,StaffLeaveApplication
 
 
 User = get_user_model()
+
 
 # Create your views here.
 def signin(request):
@@ -105,10 +106,42 @@ def courses(request):
     courses = Course.objects.all()
     return render(request, 'adminApp/manage_course.html', {'courses': courses})
 
+def create_notification(request):
+    if request.method == "POST":
+        name = request.POST["name"]
+        title = request.POST["title"]
+        desc = request.POST["desc"]
+        notif_type = request.POST["type"]
+        url = request.POST['url']
+        notification.objects.create(sender_name=name, title=title, detail_des=desc,  notification_type=notif_type, url=url)
+        return render(request, "adminApp/notification.html")
+    else:
+        return render(request, "adminApp/notification.html")
+    
+def show_notification(request):
+    notifications = notification.objects.all().order_by('-created_at')
+    return render(request,"adminApp/notificate.html",{'data':notifications})
+
+def show_notifications(request):
+    notifications = notification.objects.all().order_by('-created_at')
+    return render(request,"studentApp/notifications.html",{'data':notifications})
+
+def show_fac_notification(request):
+    notifications = notification.objects.all().order_by('-created_at')
+    return render(request,"facultyApp/notification.html",{'data':notifications})
+
+def del_notificate(request):
+    data = notification.objects.all().order_by('-created_at')
+    return render(request,'adminApp/delete_notification.html',{'noti':data})
+
+def del_notification(request, id):
+    notify = get_object_or_404(notification, id=id)
+    notify.delete()
+    return redirect('/delete_notificate')
 
 def divisions(request):
-    division = Division.objects.all()
-    return render(request, 'adminApp/manage_division.html',{'divisions':division})
+    divisions = Division.objects.all()
+    return render(request, 'adminApp/manage_division.html',{'divisions':divisions})
 
 def edit_course(request, course_id):
     try:
