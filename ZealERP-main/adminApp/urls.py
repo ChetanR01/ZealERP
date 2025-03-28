@@ -10,6 +10,14 @@ urlpatterns = [
     # Dashboard
     path('', views.dashboard, name='dashboard'),
 
+    #notification
+    path('notification', views.create_notification, name='notification'),
+    path('notify', views.show_notification, name='notify'),
+    path('notificate/', views.show_notifications, name='notificate'),
+    path('notified/', views.show_fac_notification, name='notified'),
+    path('delete_notificate', views.del_notificate, name='delete_notificate'),
+    path('delete_notification/<int:id>', views.del_notification, name='del_notification'),
+
     # Course Management
     path('manage-course/', views.courses, name='manage_course'),
     path('edit-course/<int:course_id>/', views.edit_course, name='edit_course'),

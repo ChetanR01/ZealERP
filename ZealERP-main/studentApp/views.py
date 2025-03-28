@@ -3,11 +3,14 @@ from studentApp.models import Course, Student, Division
 from .models import LeaveRequest
 from adminApp.models import Subject
 from django.contrib.auth.decorators import login_required
-
+from facultyApp.models import notification
 
 def dashboard(request):
     return render(request, 'base.html')
 
+def show_notifications(request):
+    notifications = notification.objects.all().order_by('-created_at')
+    return render(request,"studentApp/notifications.html",{'data':notifications})
 
 def apply_leave(request):
     if request.method == 'POST':

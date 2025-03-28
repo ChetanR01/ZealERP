@@ -2,9 +2,45 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from facultyApp.models import Staff,StaffLeaveApplication
+from .models import notification
+from studentApp.models import LeaveRequest
 
 def dashboard(request):
     return render(request, 'base.html')
+
+def show_fac_notification(request):
+    notifications = notification.objects.all().order_by('-created_at')
+    return render(request,"facultyApp/notification.html",{'data':notifications})
+
+@login_required
+def manage_leave(request):
+    leave_requests = LeaveRequest.objects.filter(status='pending')
+    return render(request, 'facultyapp/manage_leaves.html', {'leave_requests': leave_requests})
+
+@login_required
+def approve_leave(request, leave_id):
+    try:
+        leave_request = LeaveRequest.objects.get(id=leave_id)
+        if not hasattr(request.user, 'staff') or not request.user.staff.is_gfm:
+            return HttpResponse("You do not have the necessary permissions to approve leaves.", status=403)
+
+        leave_request.status = 'approved'
+        leave_request.approved_by = request.user.staff
+        leave_request.save()
+
+        return redirect('staff:manage_leave')
+    except LeaveRequest.DoesNotExist:
+        return HttpResponse("Leave request not found.", status=404)
+
+@login_required
+def reject_leave(request, leave_id):
+    try:
+        leave_request = LeaveRequest.objects.get(id=leave_id)
+        leave_request.status = 'rejected'
+        leave_request.save()
+        return redirect('staff:manage_leave')
+    except LeaveRequest.DoesNotExist:
+        return HttpResponse("Leave request not found.", status=404)
 
 def apply_leave(request):
     if request.method == 'POST':
@@ -26,9 +62,6 @@ def apply_leave(request):
         return redirect('staff:faculty_leave_request')
 
     return render(request, 'facultyapp/apply_faculty_leave.html')
-
-
-
 
 def faculty_leave_request(request):
     try:

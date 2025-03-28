@@ -69,8 +69,13 @@
                     <a href="index" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     
                     {% block sidenav %}{% endblock sidenav %}
+                    
+                    <a class="nav-item nav-link active" href="{% url 'student:apply_leave' %}">
+                    <i class="fa fa-calendar-check me-2"></i>
+                    Apply For student Leave
+                    </a>
 
-                    <a class="nav-item nav-link active" href="{% url 'staff:apply_faculty_leave' %}">
+                    <a class="nav-item nav-link active" href="{% url 'staff:apply_leave' %}">
                     <i class="fa fa-calendar-check me-2"></i>
                     Apply For faculty Leave
                     </a>
