@@ -79,11 +79,11 @@ WSGI_APPLICATION = 'ZealERP.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': "zealerp",       
-        'HOST': 'localhost',                
-        'USER': "yeole",          
-        'PASSWORD': "yeole",     
-        'PORT': '3306',                     
+        'NAME': os.getenv("DATABASE_NAME"),
+        'HOST': "localhost",
+        'USER': os.getenv("DATABASE_USER"),
+        'PASSWORD': os.getenv("DATABASE_PASSWORD"),
+        'PORT':"3306"
     }
 }
 
