@@ -5,10 +5,11 @@ from .models import ExtendedUser
 from studentApp.models import Course
 from facultyApp.models import notification
 
-from studentApp.models import Course,Student,Division
+from studentApp.models import Course,Student,Division,Attend
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
+from .forms import AttendanceForm
 
 from adminApp.models import Subject
 from .forms import SubjectForm
@@ -410,4 +411,28 @@ def delete_staff(request, staff_id):
         messages.success(request, "Staff details updated successfully!")
         return redirect('manage_staff')
     return render(request, 'adminApp/delete_staff.html',{'staff':staff})
+
+def mark_attendance(request):
+    if request.method == 'POST':
+        form = AttendanceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('attendance_list')
+    else:
+        form = AttendanceForm()
+    students = Student.objects.all()
+    return render(request, 'adminApp/mark_attendance.html', {'form': form, 'students': students})
+
+def attendance_list(request):
+    attendances = Attend.objects.all().order_by('-date')
+    return render(request, 'adminApp/attendance_list.html', {'attendances': attendances})
+
+def update_attendance(request, attendance_id):
+    attendance = get_object_or_404(Attend, id=attendance_id)
+    if request.method == 'POST':
+        status = request.POST.get('status')
+        attendance.status = status
+        attendance.save()
+        return redirect('attendance_list')
+    return render(request, 'adminApp/update_attend.html', {'attendance': attendance})
 

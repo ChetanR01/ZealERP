@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
+from django.utils.timezone import now
 
 
 class Course(models.Model):
@@ -63,3 +64,12 @@ class LeaveRequest(models.Model):
 
     def __str__(self):
         return f"Leave request by {self.student.user.first_name} {self.student.user.last_name} on ({self.status})"
+    
+class Attend(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    date = models.DateField(default=now)
+    status = models.CharField(max_length=10, choices=[('Present', 'Present'), ('Absent', 'Absent')],
+    default='Present')
+
+    def __str__(self):
+        return f"{self.student.user} - {self.date} - {self.status}"
