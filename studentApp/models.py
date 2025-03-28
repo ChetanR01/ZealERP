@@ -15,7 +15,9 @@ class Course(models.Model):
 
 class Division(models.Model):
     name = models.CharField(max_length=50, unique=True)
+
     academic_year= models.ImageField(default=2021)
+
     course = models.ForeignKey(Course, on_delete=models.CASCADE)  
 
     def __str__(self):
@@ -39,3 +41,26 @@ class Student(models.Model):
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} - {self.enrollment_number}"
+    
+
+class LeaveRequest(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+    ]
+
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='leave_requests')  # Use ExtendedUser
+    duration_start = models.DateField()
+    duration_end = models.DateField()
+    reason = models.TextField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    proof_image = models.FileField(upload_to='leave_requests/proofs/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def leave_duration(self):
+        return (self.duration_end - self.duration_start).days + 1
+
+    def __str__(self):
+        return f"Leave request by {self.student.user.first_name} {self.student.user.last_name} on ({self.status})"
