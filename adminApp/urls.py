@@ -14,7 +14,10 @@ urlpatterns = [
     path('delete_notificate', views.del_notificate, name='delete_notificate'),
     path('delete_notification/<int:id>', views.del_notification, name='del_notification'),
     
-
+    # Faculty Leave Management
+    path('manage_leaves/', views.manage_leaves, name='manage_leaves'),
+    path('approve_leave/<int:leave_id>/', views.approve_leave, name='approve_leave'),
+    path('reject_leave/<int:leave_id>/', views.reject_leave, name='reject_leave'),
 
     path('index', views.dashboard, name='dashboard'),
 

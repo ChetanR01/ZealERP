@@ -26,7 +26,7 @@ def apply_leave(request):
         try:
             student = Student.objects.get(user=request.user)
         except Student.DoesNotExist:
-            return render(request, 'error.html', {'message': 'Student record not found!'})
+            return render(request, '/auth', {'message': 'Student record not found!'})
         leave_request = LeaveRequest(
             duration_start=duration_start,
             duration_end=duration_end,

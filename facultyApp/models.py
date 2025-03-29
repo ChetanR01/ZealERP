@@ -33,3 +33,22 @@ class notification(models.Model):
     def __str__(self):
         return f"{self.name} is Division of {self.department}"
 
+class StaffLeaveApplication(models.Model):
+    staff = models.ForeignKey(User, on_delete=models.CASCADE, related_name='faculty_leaves')
+    reason = models.TextField()
+    start_date = models.DateField()
+    end_date = models.DateField()
+
+    STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Approved', 'Approved'),
+        ('Rejected', 'Rejected')
+    ]
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')
+    
+    faculty = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='approved_leaves')
+    faculty_remarks = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.staff.username} - {self.status}"  # Corrected this line

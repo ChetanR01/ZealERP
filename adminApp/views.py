@@ -411,3 +411,23 @@ def delete_staff(request, staff_id):
         return redirect('manage_staff')
     return render(request, 'adminApp/delete_staff.html',{'staff':staff})
 
+# Staff Leaves Module
+from facultyApp.models import StaffLeaveApplication
+def manage_leaves(request):
+    data = StaffLeaveApplication.objects.all()
+    return render(request, 'adminApp/manage_leaves.html',{'leave_requests':data})
+
+
+def approve_leave(request, leave_id):
+    leave = get_object_or_404(StaffLeaveApplication, id=leave_id)
+    leave.status = 'Approved'
+    leave.save()
+    messages.success(request, "Leave approved successfully.")
+    return redirect('manage_leaves')
+
+def reject_leave(request, leave_id):
+    leave = get_object_or_404(StaffLeaveApplication, id=leave_id)
+    leave.status = 'Rejected'
+    leave.save()
+    messages.success(request, "Leave rejected successfully.")
+    return redirect('manage_leaves')

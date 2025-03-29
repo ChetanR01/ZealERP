@@ -1,0 +1,31 @@
+{% extends "adminApp/index.html" %}
+
+{% block mainblock %}
+<body>
+    <div class="container mt-5">
+        <h1>Add Divisions</h1>
+        <form method="POST" class="mt-4" action="/add_division">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="name" class="form-label">Division Name:</label>
+                <input type="text" id="name"  class="form-control" required name="name">
+            </div>
+            <div class="mb-3">
+                <label for="duration" class="form-label">Academic Year</label>
+                <input type="text" id="duration"  class="form-control" required name="academic">
+            </div>
+            <div class="mb-3">
+                <label for="course" class="form-label">Course</label>
+                <select class="form-select" id="course" name="course_id">
+                    <option selected>Choose...</option>
+                    {% for course in courses %}
+                    <option value="{{ course.id }}">{{ course.name }}</option>
+                    {% endfor %}
+                </select> <br>
+ 
+            <button type="submit" class="btn btn-primary">Add</button>
+            <a href="/manage-division" class="btn btn-secondary">Back to Division List</a>
+        </form>
+    </div>
+   </body>
+   {% endblock mainblock %}
