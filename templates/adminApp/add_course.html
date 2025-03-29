@@ -1,0 +1,29 @@
+{% extends "adminApp/index.html" %}
+
+{% block mainblock %}
+<body>
+    <div class="container mt-5">
+        <h1>Add Course</h1>
+        <form method="POST" class="mt-4">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="name" class="form-label">Course Name:</label>
+                <input type="text" id="name" name="name" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="duration" class="form-label">Course Duration:</label>
+                <input type="text" id="duration" name="duration" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="is_active" class="form-label">Is Active:</label>
+                <select id="is_active" name="is_active" class="form-select" required>
+                    <option value="True">Yes</option>
+                    <option value="False">No</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Add</button>
+            <a href="{% url 'manage_course' %}" class="btn btn-secondary">Back to Course List</a>
+        </form>
+    </div>
+   </body>
+   {% endblock mainblock %}

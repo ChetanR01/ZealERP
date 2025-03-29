@@ -1,0 +1,71 @@
+{% extends "adminApp/index.html" %}
+
+{% block mainblock %}
+<div class="col-12">
+    <div class="bg-light rounded h-100 p-4">
+        <h6 class="mb-4">Manage Subjects</h6>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Sr No.</th>
+                        <th scope="col">Subject Code</th>
+                        <th scope="col">Subject Name</th>
+                        <th scope="col">Subject Type</th>
+                        <th scope="col">Course Type</th>
+                        <th scope="col">Course</th>
+                        <th scope="col">Semester</th>
+                        <th scope="col">Faculty</th>
+
+                        {% if request.user.is_authenticated and request.user.is_staff %}
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
+                        {% endif %}
+                                    
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for subject in subjects %}
+                    <tr>
+                        <th scope="row">{{forloop.counter}}</th>
+                        <td>{{subject.subject_code}}</td>
+                        <td>{{subject.subject_name}}</td>
+                        <td>{{subject.subject_type}}</td>
+                        <td>{{subject.course_type}}</td>
+                        <td>{{subject.course}}</td>
+                        <td>{{subject.semester}}</td>
+                        <td>{{subject.faculty}}</td>
+                        
+                        {% if request.user.is_authenticated and request.user.is_staff %}
+                        <th scope="col">
+                            <a href="{% url 'update_subject' subject.id %}" class="edit-subject-btn">
+                                <i class="fas fa-edit"></i> <!-- Edit Icon -->
+                            </a>
+                        </th>
+                        <th scope="col">
+                            <form method="POST" action="{% url 'delete_subject' subject.id %}" class="delete-form">
+                                {% csrf_token %}
+                                <button type="submit" class="delete-btn" onclick="return confirm('Are you sure?');">
+                                    <i class="fas fa-trash"></i> <!-- Delete Icon -->
+                                </button>
+                            </form>
+                        </th>
+                        
+                        {% endif %}  
+                    </tr>
+                    {% endfor %}
+                    
+                </tbody>
+            </table>
+
+            {% if request.user.is_authenticated and request.user.is_staff %}
+            <a href="add_subject" class="add-subject-btn">
+                <i class="fas fa-plus"></i> Add Subject
+            </a>
+            {% endif %}
+            
+        </div>
+    </div>
+</div>
+
+{% endblock mainblock %}

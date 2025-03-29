@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% load static %}
+{% block mainblock %}
+    <style>
+    
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f9fc;
+            margin: 0;
+            flex-direction: column;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #0d0d29;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #99eae5;
+        }
+        .container {
+            margin-top: 350px;
+            max-width: 1200px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .notification-card {
+            width: 22%;
+            min-width: 250px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        .notification-header {
+            display:inline-flex;
+            align-items: center;
+            gap: 120px;
+        }
+        .notification-title {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .delete-btn {
+            background: none;
+            border: 2px solid;
+            color: red;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 6px;
+            border-radius: 5px;
+        }
+        .notification-body {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #1f1f1f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% for item in data %}
+        <div class="notification-card" id="notification-{{ item.id }}">
+            <div class="notification-header">
+                <span class="notification-title">{{ item.title }}</span>
+                <button class="delete-btn" onclick="deleteNotification('{{ item.id }}')">✖</button>
+            </div>
+            <div class="notification-body">
+                <p><strong>Sender:</strong> {{ item.sender_name }}</p>
+                <p>{{ item.detail_des }}</p>
+                <p><strong>Type:</strong> {{ item.notification_type }}</p>
+                {% if item.url %}
+                <p><a href="{{ item.url }}" target="_blank">Click here for more details</a></p>
+                {% endif %}
+                <p><small>{{ item.created_at }}</small></p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <script>
+        function deleteNotification(notificationId) {
+            let notificationElement = document.getElementById("notification-" + notificationId);
+            if (notificationElement) {
+                notificationElement.remove();
+                localStorage.setItem("deleted-" + notificationId, "true");
+            }
+        }
+        
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".notification-card").forEach(card => {
+                let notificationId = card.id.replace("notification-", "");
+                if (localStorage.getItem("deleted-" + notificationId)) {
+                    card.remove();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+{% endblock mainblock %}
